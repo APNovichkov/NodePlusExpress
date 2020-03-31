@@ -5,6 +5,11 @@ const Tenor = require("tenorjs").client({
     "Filter": "high", // "off", "low", "medium", "high", not case sensitive
     "Locale": "en_US", // Your locale here, case-sensitivity depends on input
 });
+var request = require('request');
+
+// Variables
+let tenor_api_key = "7E4ONEZA4SAS"
+let tenor_limit = 10
 
 // App Setup
 const app = express();
@@ -16,19 +21,33 @@ app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
 // Routes
+// app.get('/', (req, res) => {
+//     term = ""
+//     if (req.query.term) {
+//         term = req.query.term
+//     }
+//     // Tenor.search.Query("SEARCH KEYWORD HERE", "LIMIT HERE")
+//     Tenor.Search.Query(term, "10")
+//         .then(response => {
+//             // store the gifs we get back from the search
+//             const gifs = response;
+//             // pass the gifs as an object into the home page
+//             res.render('home', { gifs })
+//         }).catch(console.error);
+// })
+
 app.get('/', (req, res) => {
     term = ""
-    if (req.query.term) {
+    if (req.query.term){
         term = req.query.term
     }
-    // Tenor.search.Query("SEARCH KEYWORD HERE", "LIMIT HERE")
-    Tenor.Search.Query(term, "10")
-        .then(response => {
-            // store the gifs we get back from the search
-            const gifs = response;
-            // pass the gifs as an object into the home page
-            res.render('home', { gifs })
-        }).catch(console.error);
+    let request_url = "https://api.tenor.com/v1/search?q=" + term + "&key=" + tenor_api_key + "&limit=" + tenor_limit;
+    request(request_url, (error, response, body) => {
+        var result = JSON.parse(body)
+        const gifs = result.results
+        res.render('home', { gifs })
+    });
+
 })
 
 app.get('/', (req, res) => {
