@@ -9,7 +9,7 @@
   "author": "Andrey Novichkov",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-handlebars": "^4.0.0",
     "request": "^2.88.2",
     "tenorjs": "^1.0.7"
